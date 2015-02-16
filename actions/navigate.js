@@ -33,6 +33,14 @@ module.exports = function (context, payload, done) {
         return;
     }
 
+    // change location immediately if browser has no pushState support
+    try {
+      if ( window.history && !window.history.pushState ) {
+        location.href = payload.url;
+        return;
+      }
+    } catch (e) {}
+
     // add parsed query parameter object to route object,
     // and make it part of CHANGE_ROUTE_XXX action payload.
     route.query = parseQueryString(route.url);
